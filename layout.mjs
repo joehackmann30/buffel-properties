@@ -35,7 +35,7 @@ export function header(active) {
 <header>
   <div class="wrap navbar">
     <a class="logo" href="/" aria-label="${esc(CONFIG.siteName)} home">
-      <img src="${CONFIG.logos.wordmark}" alt="${esc(CONFIG.siteName)}" width="224" height="56">
+      <img src="${CONFIG.logos.wordmarkHeader}" alt="${esc(CONFIG.siteName)}" width="300" height="64">
     </a>
     <nav class="main" id="nav" aria-label="Main">
         ${links}

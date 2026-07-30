@@ -32,12 +32,15 @@ export const CONFIG = {
     title: "Regional Representative, Central Missouri",
     phone: "573-418-4536",
     phoneHref: "tel:5734184536",
-    email: "drew.voss123@gmail.com",
+    email: "drew@buffelproperties.com",
   },
 
   logos: {
     wordmark: "https://static.wixstatic.com/media/e659e5_648a5fb7be3b4a65a219ca888984bd1b~mv2.png",
     bison: "https://static.wixstatic.com/media/e659e5_5ceaa99bf8564ec1bfd16f82a8f3dd73~mv2.png",
+    // Header-only lockup: same artwork with the dead space between BUFFEL and
+    // PROPERTIES closed up, so PROPERTIES stays legible at header size.
+    wordmarkHeader: "/assets/photos/wordmark-header.png",
   },
 
   wix: {
