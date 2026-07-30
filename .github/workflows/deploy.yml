@@ -9,9 +9,11 @@ on:
   # Lets a Wix automation trigger a rebuild via the GitHub API.
   repository_dispatch:
     types: [wix-content-update]
-  # Safety net: rebuild every Monday so CMS edits never sit unpublished indefinitely.
+  # Picks up Wix CMS edits automatically. Every 3 hours, so a content change
+  # goes live within 3 hours without anyone doing anything.
+  # For an immediate publish, use the "Run workflow" button in the Actions tab.
   schedule:
-    - cron: "0 11 * * 1"
+    - cron: "0 */3 * * *"
 
 permissions:
   contents: read

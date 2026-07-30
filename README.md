@@ -46,7 +46,7 @@ new page.
 1. Go to your Wix dashboard → **CMS** → **Billboard Locations**
 2. Add a row, or edit an existing one
 3. Set **Publicly Visible** to `true` when you want it on the site
-4. Run `node build.mjs` and redeploy
+4. Wait for the next scheduled build, or trigger one immediately from the Actions tab
 
 **The build only publishes rows where `publicly_visible` is `true`.** Everything else is
 excluded — it never reaches the HTML. That is a hard gate in `wix.mjs`, not a display setting.
@@ -77,21 +77,22 @@ warnings, not blockers — the site still builds.
 
 ---
 
-## Deploy
+## Deploy — already live
 
-Any static host works. Cloudflare Pages is free and fast:
+**https://joehackmann30.github.io/buffel-properties/**
 
-1. Push this folder to a GitHub repo
-2. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → connect the repo
-3. Build command: `node build.mjs`
-4. Build output directory: `dist`
-5. Environment variable: `WIX_CLIENT_SECRET` (see below)
-6. Add `buffelproperties.com` as a custom domain
+Hosted on GitHub Pages, built by GitHub Actions on every push. Repo:
+[joehackmann30/buffel-properties](https://github.com/joehackmann30/buffel-properties).
 
-Netlify and Vercel work the same way with the same two settings.
+### Moving to buffelproperties.com
 
-After that, "publishing" a content change is: edit in Wix → trigger a rebuild. You can wire a
-Wix automation to hit your host's deploy webhook so it happens automatically.
+1. In `config.mjs`, set `customDomain: "www.buffelproperties.com"`
+2. Point DNS: `CNAME` record for `www` → `joehackmann30.github.io`
+3. GitHub repo → Settings → Pages → add the custom domain, tick **Enforce HTTPS**
+4. Commit and push
+
+The build writes the `CNAME` file, drops the `/buffel-properties` path prefix from every
+internal link, and rewrites all canonical URLs automatically.
 
 ---
 
@@ -102,7 +103,7 @@ Configured in `config.mjs`:
 | | |
 |---|---|
 | Site ID | `676ab4a4-21b1-4ccc-bd06-43e4d9327ca7` |
-| Collection | `BillboardLocations` |
+| Collections | `BillboardLocations`, `SiteContent` |
 | OAuth client ID | `db9159b9-6418-4c51-9fa2-c2b4434cfeca` |
 
 The **client ID is public** and safe to commit.
@@ -147,19 +148,52 @@ node build.mjs
 
 ---
 
+## Forms — where leads go
+
+Both forms on `/contact/` post straight into **Wix → Forms & Submissions**:
+
+| Form | Wix form ID |
+|---|---|
+| Advertising Inquiry | `4995d310-3731-40ca-8e4e-c6e8b92422c9` |
+| Land Evaluation Request | `72a2c518-bb88-4097-8071-ab634b1e1f23` |
+
+Submissions also upsert a **Contact** in your Wix CRM, so leads build a contact list
+automatically.
+
+How it works: the browser gets an anonymous Wix visitor token using the public client ID, then
+posts the submission. **No secret is ever exposed to the browser.** Phone numbers are converted
+to E.164 (`+16362668099`) first — Wix rejects bare 10-digit numbers.
+
+Protections built in: honeypot field, Wix's own `ADVANCED` spam filter, inline validation with
+accessible error messages, consent capture with a timestamp, and a fallback message pointing to
+your phone and email if the request ever fails.
+
+**Email notifications:** set these in Wix → Forms & Submissions → the form → Settings. Wix owns
+notification delivery, not this codebase.
+
+---
+
+## Publishing content changes
+
+Edit in Wix, then the site updates when a build runs:
+
+- **Automatically, every 3 hours** — the scheduled job in `.github/workflows/deploy.yml`
+- **Immediately** — GitHub repo → **Actions** tab → **Build and deploy** → **Run workflow**
+- **On any push** to `main`
+
+For a true instant webhook, a Wix Automation would need to POST to GitHub's
+`repository_dispatch` endpoint with event type `wix-content-update`. That needs an HTTP action
+in Wix Automations, which may require a Premium plan — the 3-hour schedule covers it without.
+
+---
+
 ## Still to do
 
-- **Forms have no endpoint yet.** Both forms on `/contact/` post to
-  `[PLACEHOLDER — FORM ENDPOINT]`. A static site cannot process submissions on its own. Options
-  in rough order of least work: your host's built-in form handling (Netlify Forms, Cloudflare),
-  a service like Formspree, or posting to the Wix Forms API so submissions land in your Wix
-  dashboard alongside everything else.
-- Real photographs of the Hwy 47 structure
-- Response-time commitment in `config.mjs`
-- Illumination type and nearby landmarks for Hwy 47 & Hwy O
-- Founding year and owner photo
+- Attach the structure photos to the CMS record (both are already in your Media Manager)
+- Owner photo for `/about/`
 - A 1200×630 social share image
 - Legal review of `/privacy/`
+- Lock the CMS collections to `read: ADMIN` (see above)
 
 ---
 
@@ -173,7 +207,7 @@ wix.mjs           fetches CMS data; owns the publicly_visible gate
 layout.mjs        page shell, header, footer, cards, CTAs, schema
 pages.mjs         page structure
 build.mjs         the generator + content audit
-assets/           stylesheet
+assets/           stylesheet, form script, photos
 dist/             generated output — do not edit, it is overwritten every build
 ```
 
