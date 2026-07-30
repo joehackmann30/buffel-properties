@@ -12,7 +12,7 @@ export const CONFIG = {
   //
   // When the domain is ready: set customDomain to "www.buffelproperties.com",
   // commit, push. The build writes the CNAME and switches all canonical URLs.
-  customDomain: null,
+  customDomain: "www.buffelproperties.com",
   fallbackUrl: "https://joehackmann30.github.io/buffel-properties",
 
   phone: "636-266-8099",
