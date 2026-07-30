@@ -348,9 +348,11 @@ export function about() {
       ${rule}<h2>${esc(tp("about.why.heading"))}</h2>
       <div class="stack" style="margin-top:24px;color:var(--slate)">${th("about.why.body")}</div>
     </div>
-    <div style="background:var(--gray);aspect-ratio:4/5;display:flex;align-items:center;
-      justify-content:center;text-align:center;padding:24px">
-      <span class="cap">[PLACEHOLDER &mdash; owner photo, Joe Hackmann]</span>
+    <div>
+      <img src="/assets/photos/owner-headshot.jpg" alt="Joe Hackmann, owner of BUFFEL Properties"
+        width="880" height="1100" loading="lazy"
+        style="width:100%;aspect-ratio:4/5;object-fit:cover;display:block">
+      <p class="cap" style="margin-top:12px">Joe Hackmann, owner</p>
     </div>
   </div>
 </section>
