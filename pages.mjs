@@ -394,23 +394,23 @@ export function contact(locations) {
   <div class="wrap" style="max-width:820px">
     ${rule}<h2>${esc(tp("contact.adv.heading"))}</h2>
     <p class="lede" style="color:var(--slate);margin:20px 0 28px">${esc(tp("contact.adv.intro"))}</p>
-    <form class="form" method="POST" action="[PLACEHOLDER — FORM ENDPOINT]" novalidate>
-      <div class="field"><label for="a-biz">Business name</label><input id="a-biz" name="business" required></div>
-      <div class="field"><label for="a-name">Contact name</label><input id="a-name" name="name" required></div>
-      <div class="field"><label for="a-phone">Phone</label><input id="a-phone" name="phone" type="tel" required></div>
-      <div class="field"><label for="a-email">Email</label><input id="a-email" name="email" type="email" required></div>
-      ${locations.length ? `<div class="field"><span style="display:block;font-weight:600;font-size:15px;margin-bottom:8px">Location(s) of interest</span>
-            ${locOptions}</div>` : ""}
+    <form class="form" novalidate data-form-id="${CONFIG.wix.forms.advertising}"
+          data-success="Thanks — we've got it. We'll be in touch within one business day.">
+      <div class="field"><label for="a-biz">Business name</label><input id="a-biz" data-target="business_name" required></div>
+      <div class="field"><label for="a-name">Contact name</label><input id="a-name" data-target="contact_name" required></div>
+      <div class="field"><label for="a-phone">Phone</label><input id="a-phone" data-target="phone" type="tel" required></div>
+      <div class="field"><label for="a-email">Email</label><input id="a-email" data-target="email" type="email" required></div>
       <div class="field"><label for="a-when">Desired start timeframe</label>
-        <select id="a-when" name="timeframe" required><option value="">Select&hellip;</option>
-          <option>Immediately</option><option>1&ndash;3 months</option>
-          <option>3&ndash;6 months</option><option>Just exploring</option></select></div>
-      <div class="field"><label for="a-msg">Message <span class="req">(optional)</span></label><textarea id="a-msg" name="message"></textarea></div>
-      <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="a-hp">Leave blank</label><input id="a-hp" name="_hp" tabindex="-1" autocomplete="off"></div>
-      <div class="field consent"><input type="checkbox" id="a-ok" name="consent" required>
+        <select id="a-when" data-target="timeframe" required><option value="">Select&hellip;</option>
+          <option>Immediately</option><option>1-3 months</option>
+          <option>3-6 months</option><option>Just exploring</option></select></div>
+      <div class="field"><label for="a-msg">Message <span class="req">(optional)</span>${locations.length ? " — tell us which locations you're interested in" : ""}</label><textarea id="a-msg" data-target="message"></textarea></div>
+      <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="a-hp">Leave blank</label><input id="a-hp" data-hp tabindex="-1" autocomplete="off"></div>
+      <div class="field consent"><input type="checkbox" id="a-ok" data-consent required>
         <label for="a-ok" style="font-weight:400">I agree to be contacted about this inquiry and have read the
         <a href="/privacy/" style="color:var(--navy)">Privacy Policy</a>.</label></div>
       <button class="btn btn-green" type="submit" style="width:100%">Send Inquiry</button>
+      <p class="form-status" aria-live="polite"></p>
     </form>
   </div>
 </section>
@@ -419,26 +419,28 @@ export function contact(locations) {
   <div class="wrap" style="max-width:820px">
     ${rule}<h2>${esc(tp("contact.land.heading"))}</h2>
     <p class="lede" style="color:var(--slate);margin:20px 0 28px">${esc(tp("contact.land.intro"))}</p>
-    <form class="form" method="POST" action="[PLACEHOLDER — FORM ENDPOINT]" novalidate>
-      <div class="field"><label for="l-name">Name</label><input id="l-name" name="name" required></div>
-      <div class="field"><label for="l-phone">Phone</label><input id="l-phone" name="phone" type="tel" required></div>
-      <div class="field"><label for="l-email">Email</label><input id="l-email" name="email" type="email" required></div>
-      <div class="field"><label for="l-addr">Property address or nearest cross streets</label><input id="l-addr" name="address" required></div>
-      <div class="field"><label for="l-county">County</label><input id="l-county" name="county" placeholder="e.g. Franklin" required></div>
+    <form class="form" novalidate data-form-id="${CONFIG.wix.forms.land}"
+          data-success="Thanks — we've got your property details. We'll review the location, traffic, spacing, and permitting feasibility and get back to you either way.">
+      <div class="field"><label for="l-name">Name</label><input id="l-name" data-target="contact_name" required></div>
+      <div class="field"><label for="l-phone">Phone</label><input id="l-phone" data-target="phone" type="tel" required></div>
+      <div class="field"><label for="l-email">Email</label><input id="l-email" data-target="email" type="email" required></div>
+      <div class="field"><label for="l-addr">Property address or nearest cross streets</label><input id="l-addr" data-target="property_address" required></div>
+      <div class="field"><label for="l-county">County</label><input id="l-county" data-target="county" placeholder="e.g. Franklin" required></div>
       <div class="field"><label for="l-hwy">Highway frontage</label>
-        <select id="l-hwy" name="highway" required><option value="">Select&hellip;</option>
+        <select id="l-hwy" data-target="highway_frontage" required><option value="">Select&hellip;</option>
           <option>Hwy 47</option><option>Hwy 100</option><option>I-44</option>
           <option>Hwy 54</option><option>Hwy 61</option><option>Other</option></select></div>
-      <div class="field"><label for="l-feet">Approximate highway frontage in feet <span class="req">(optional)</span></label><input id="l-feet" name="frontage" type="number" min="0"></div>
+      <div class="field"><label for="l-feet">Approximate highway frontage in feet <span class="req">(optional)</span></label><input id="l-feet" data-target="frontage_feet" type="number" min="0"></div>
       <div class="field"><label for="l-own">Do you own the property?</label>
-        <select id="l-own" name="ownership" required><option value="">Select&hellip;</option>
+        <select id="l-own" data-target="ownership" required><option value="">Select&hellip;</option>
           <option>Yes</option><option>No</option><option>Partial interest</option></select></div>
-      <div class="field"><label for="l-msg">Anything else we should know <span class="req">(optional)</span></label><textarea id="l-msg" name="message"></textarea></div>
-      <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="l-hp">Leave blank</label><input id="l-hp" name="_hp" tabindex="-1" autocomplete="off"></div>
-      <div class="field consent"><input type="checkbox" id="l-ok" name="consent" required>
+      <div class="field"><label for="l-msg">Anything else we should know <span class="req">(optional)</span></label><textarea id="l-msg" data-target="message"></textarea></div>
+      <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="l-hp">Leave blank</label><input id="l-hp" data-hp tabindex="-1" autocomplete="off"></div>
+      <div class="field consent"><input type="checkbox" id="l-ok" data-consent required>
         <label for="l-ok" style="font-weight:400">I agree to be contacted about this request and have read the
         <a href="/privacy/" style="color:var(--navy)">Privacy Policy</a>.</label></div>
       <button class="btn btn-green" type="submit" style="width:100%">Request Free Evaluation</button>
+      <p class="form-status" aria-live="polite"></p>
     </form>
     <p class="cap" style="margin-top:24px">${esc(tp("land.disclaimer"))}</p>
   </div>
@@ -446,7 +448,7 @@ export function contact(locations) {
   return page({
     title: "Contact BUFFEL Properties | Billboard Advertising Missouri",
     description: `Advertising inquiries and land evaluation requests. Call ${CONFIG.phone}.`,
-    path: "/contact/", active: "contact", body,
+    path: "/contact/", active: "contact", body, scripts: ["/assets/forms.js"],
   });
 }
 

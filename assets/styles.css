@@ -197,3 +197,13 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--green);outline-offs
 .crumb{font-size:14px;color:rgba(255,255,255,.7);margin-bottom:16px}
 .crumb a{color:rgba(255,255,255,.7)}
 .crumb a:hover{color:var(--green)}
+
+/* ---------- form status + errors ---------- */
+.form-status{display:none;margin-top:18px;padding:14px 18px;font-size:16px;line-height:1.5;
+  border-left:4px solid var(--slate);background:var(--gray);color:var(--navy)}
+.form-status.ok{border-left-color:var(--green);background:#F1F9EA}
+.form-status.error{border-left-color:#B3261E;background:#FDF0EF;color:#7A1C16}
+.form-status.pending{border-left-color:var(--slate)}
+.field-error{margin-top:6px;font-size:14px;color:#B3261E;font-weight:500}
+[aria-invalid="true"]{border:2px solid #B3261E !important;padding:12px 13px !important}
+button[disabled]{opacity:.6;cursor:default}

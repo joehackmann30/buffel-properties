@@ -43,6 +43,11 @@ export const CONFIG = {
     // Client ID is safe to expose. The SECRET is not — it lives in the
     // WIX_CLIENT_SECRET environment variable and is never written to disk here.
     clientId: "db9159b9-6418-4c51-9fa2-c2b4434cfeca",
+    // Wix Forms — submissions land in Wix dashboard → Forms & Submissions
+    forms: {
+      advertising: "4995d310-3731-40ca-8e4e-c6e8b92422c9",
+      land: "72a2c518-bb88-4097-8071-ab634b1e1f23",
+    },
   },
 
   // Map framing for the locations index.
