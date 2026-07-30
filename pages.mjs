@@ -16,7 +16,7 @@ export function home(locations) {
   const cards = locations.slice(0, 3).map(locationCard).join("\n");
   const shot = locations.find((l) => l.hero_image);
   const heroPhoto = shot
-    ? `<div class="photo" style="background-image:url('${esc(shot.hero_image)}');background-size:cover;background-position:center;opacity:1"></div>`
+    ? `<div class="photo" style="background-image:url('${esc(shot.hero_image)}');background-size:cover;background-position:22% center;opacity:1"></div>`
     : `<div class="photo"></div>`;
   const heroNote = shot
     ? (shot.hero_caption ? `<div class="photo-note">${esc(shot.hero_caption)}</div>` : "")
