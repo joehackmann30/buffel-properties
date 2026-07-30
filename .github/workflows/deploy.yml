@@ -1,0 +1,54 @@
+name: Build and deploy
+
+on:
+  # Any push to main rebuilds and redeploys.
+  push:
+    branches: [main]
+  # "Run workflow" button in the Actions tab — use this after editing content in Wix.
+  workflow_dispatch:
+  # Lets a Wix automation trigger a rebuild via the GitHub API.
+  repository_dispatch:
+    types: [wix-content-update]
+  # Safety net: rebuild every Monday so CMS edits never sit unpublished indefinitely.
+  schedule:
+    - cron: "0 11 * * 1"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Build site from Wix CMS
+        env:
+          WIX_CLIENT_SECRET: ${{ secrets.WIX_CLIENT_SECRET }}
+        run: node build.mjs
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
