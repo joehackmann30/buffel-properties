@@ -13,7 +13,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--body);font-size:17px;line-height:1.6;color:var(--navy);background:var(--white);-webkit-font-smoothing:antialiased}
-img{max-width:100%;display:block}
+img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 
 h1,h2,h3,h4{font-family:var(--head);font-weight:700;line-height:1.1}
