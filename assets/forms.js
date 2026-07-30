@@ -84,13 +84,26 @@
     return ok;
   }
 
+  /* Wix requires E.164 (+1XXXXXXXXXX). Visitors type "636-266-8099" or
+     "(636) 266-8099", so normalise before sending. US/Canada assumed. */
+  function toE164(raw) {
+    var d = (raw || "").replace(/[^\d+]/g, "");
+    if (d.charAt(0) === "+") return d;
+    d = d.replace(/\D/g, "");
+    if (d.length === 10) return "+1" + d;
+    if (d.length === 11 && d.charAt(0) === "1") return "+" + d;
+    return d ? "+" + d : "";
+  }
+
   function collect(form) {
     var data = {};
     var inputs = form.querySelectorAll("[data-target]");
     for (var i = 0; i < inputs.length; i++) {
       var el = inputs[i];
       var v = (el.value || "").trim();
-      if (v) data[el.getAttribute("data-target")] = v;
+      if (!v) continue;
+      if (el.type === "tel") v = toE164(v);
+      data[el.getAttribute("data-target")] = v;
     }
     var consent = form.querySelector("[data-consent]");
     if (consent && consent.checked) {
