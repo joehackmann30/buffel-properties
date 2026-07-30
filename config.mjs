@@ -17,7 +17,7 @@ export const CONFIG = {
 
   phone: "636-266-8099",
   phoneHref: "tel:6362668099",
-  email: "joehackmann30@icloud.com",
+  email: "joe@buffelproperties.com",
   city: "Marthasville",
   state: "Missouri",
   stateCode: "MO",

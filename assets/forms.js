@@ -152,8 +152,10 @@
         })
         .catch(function (err) {
           if (btn) { btn.disabled = false; btn.textContent = original; }
+          var ph = document.body.getAttribute("data-phone") || "";
+          var em = document.body.getAttribute("data-email") || "";
           setStatus(form, "error",
-            "Something went wrong sending that. Please call or text 636-266-8099, or email joehackmann30@icloud.com.");
+            "Something went wrong sending that. Please call or text " + ph + ", or email " + em + ".");
           if (window.console) console.error("BUFFEL form error:", err && err.message);
         });
     });

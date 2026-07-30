@@ -141,7 +141,7 @@ ${noindex ? '<meta name="robots" content="noindex,follow">\n' : ""}<meta propert
 <link rel="stylesheet" href="${asset("styles.css")}">
 <script type="application/ld+json">${JSON.stringify(blocks.length === 1 ? blocks[0] : blocks)}</script>
 </head>
-<body data-wix-client="${CONFIG.wix.clientId}">
+<body data-wix-client="${CONFIG.wix.clientId}" data-phone="${esc(CONFIG.phone)}" data-email="${esc(CONFIG.email)}">
 ${header(active)}
 <main id="main">
 ${body}
