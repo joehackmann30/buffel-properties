@@ -126,11 +126,14 @@ ${noindex ? '<meta name="robots" content="noindex,follow">\n' : ""}<meta propert
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${canonical}">
 <meta property="og:site_name" content="${esc(CONFIG.siteName)}">
-<meta property="og:image" content="${CONFIG.logos.bison}">
+<meta property="og:image" content="${CONFIG.baseUrl}/assets/photos/og-share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="BUFFEL Properties">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">
-<meta name="twitter:image" content="${CONFIG.logos.bison}">
+<meta name="twitter:image" content="${CONFIG.baseUrl}/assets/photos/og-share.jpg">
 <link rel="icon" href="${CONFIG.logos.bison}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
