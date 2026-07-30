@@ -125,14 +125,25 @@ Nothing sensitive is exposed today, because those rows contain only placeholders
 landowner names. But once you start filling in real details on sites you haven't decided to
 announce, that changes.
 
-The fix, once `WIX_CLIENT_SECRET` is set in your deploy environment:
+**`WIX_CLIENT_SECRET` is already set in GitHub Actions secrets, and the admin-authenticated
+build is verified working.** So the only remaining step is flipping the permission — and it has
+to be done by hand, because the Wix REST API refuses permission changes (`WDE0075`) on both the
+update and patch endpoints. It is a dashboard-only setting.
 
-1. Change the collection permission to `read: ADMIN`
-2. The build authenticates as admin and keeps working
-3. Nothing about your unbuilt sites is publicly queryable
+**Do this in Wix:**
 
-Do these in that order — flipping the permission before the secret is configured will break
-the build.
+1. Dashboard → **CMS**
+2. Open **Billboard Locations**
+3. **More Actions** (or the settings/gear icon) → **Permissions**
+4. Set **read / "Who can view content"** to **Admin**
+5. Repeat for **Site Content**
+
+Deploys keep working afterward because Actions has the secret. Local builds will need it too:
+
+```bash
+export WIX_CLIENT_SECRET="…"
+node build.mjs
+```
 
 ---
 
