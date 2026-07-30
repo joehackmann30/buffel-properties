@@ -14,9 +14,16 @@ const items = (key) => tl(key).map((s) => `<li>${s}</li>`).join("\n          ");
 /* ================= HOME ================= */
 export function home(locations) {
   const cards = locations.slice(0, 3).map(locationCard).join("\n");
+  const shot = locations.find((l) => l.hero_image);
+  const heroPhoto = shot
+    ? `<div class="photo" style="background-image:url('${esc(shot.hero_image)}');background-size:cover;background-position:center;opacity:1"></div>`
+    : `<div class="photo"></div>`;
+  const heroNote = shot
+    ? (shot.hero_caption ? `<div class="photo-note">${esc(shot.hero_caption)}</div>` : "")
+    : '<div class="photo-note">[PLACEHOLDER &mdash; hero photo of Hwy 47 &amp; Hwy O structure]</div>';
   const body = `
 <div class="hero">
-  <div class="photo"></div><div class="veil"></div>
+  ${heroPhoto}<div class="veil"></div>
   <div class="wrap">
     <h1>${esc(tp("home.hero.headline"))}</h1>
     <p class="lede">${esc(tp("home.hero.subhead"))}</p>
@@ -25,7 +32,7 @@ export function home(locations) {
       <a class="btn btn-outline" href="/landowners/">${esc(tp("home.hero.cta2"))}</a>
     </div>
   </div>
-  <div class="photo-note">[PLACEHOLDER &mdash; hero photo of Hwy 47 &amp; Hwy O structure]</div>
+  ${heroNote}
 </div>
 
 <section class="bg-white">
@@ -145,7 +152,9 @@ ${others.slice(0, 3).map(locationCard).join("\n")}
     <h1 style="font-size:52px;margin-top:8px">${esc(loc.name)}</h1>
     <p class="lede" style="margin-top:14px">${esc(loc.highway)} &middot; ${esc(loc.city)}, ${esc(loc.county)} County</p>
   </div>
-  ${loc.hero_image ? "" : '<div class="photo-note">[PLACEHOLDER &mdash; structure photo]</div>'}
+  ${loc.hero_image
+      ? (loc.hero_caption ? `<div class="photo-note">${esc(loc.hero_caption)}</div>` : "")
+      : '<div class="photo-note">[PLACEHOLDER &mdash; structure photo]</div>'}
 </div>
 
 <section class="bg-white">
@@ -454,48 +463,97 @@ export function contact(locations) {
 
 /* ================= PRIVACY ================= */
 export function privacy() {
+  const h = (t) => `<h3 style="color:var(--navy)">${t}</h3>`;
   const body = `
 <section class="bg-navy" style="padding-top:88px;padding-bottom:56px">
-  <div class="wrap">${rule}<h1 style="font-size:44px">Privacy Policy</h1></div>
+  <div class="wrap">${rule}<h1 style="font-size:44px">Privacy Policy</h1>
+    <p class="lede" style="margin-top:18px;max-width:64ch">The short version: we collect what
+    you type into our forms so we can reply to you. We don't track you, we don't advertise to
+    you, and we don't sell your information to anyone.</p>
+  </div>
 </section>
 <section class="bg-white">
   <div class="wrap" style="max-width:760px">
-    <div class="note"><strong>[REVIEW &mdash; not legal advice.</strong> Have counsel or a
-    policy generator confirm this before publishing.]</div>
-    <p class="cap" style="margin-top:28px">Last updated: [PLACEHOLDER &mdash; date of publication]</p>
+    <p class="cap">Last updated: ${CONFIG.privacyUpdated}</p>
     <div class="stack" style="margin-top:32px;color:var(--slate)">
-      <h3 style="color:var(--navy)">What we collect</h3>
-      <p>When you submit a form on this site, we collect the information you enter into it.
-      Depending on the form, that includes your name, business name, phone number, email
-      address, property location, and any message you write.</p>
-      <p>We also collect standard analytics about site visits, such as pages viewed and general
-      location.</p>
-      <h3 style="color:var(--navy)">How we use it</h3>
-      <p>We use your information for one purpose: to respond to your inquiry and to communicate
-      with you about billboard advertising or land leasing with BUFFEL Properties.</p>
-      <h3 style="color:var(--navy)">What we do not do</h3>
+
+      ${h("Who we are")}
+      <p>${esc(CONFIG.legalName)} is an outdoor advertising company based in ${esc(CONFIG.city)},
+      ${esc(CONFIG.state)}. This policy covers ${esc(CONFIG.baseUrl.replace(/^https?:\/\//, ""))}.</p>
+
+      ${h("What we collect")}
+      <p><strong style="color:var(--navy)">Information you give us.</strong> When you submit the
+      Advertising Inquiry form we collect your business name, contact name, phone number, email
+      address, desired start timeframe, and any message you write. When you submit the Land
+      Evaluation Request form we collect your name, phone number, email address, the property
+      address or nearest cross streets, county, highway frontage, approximate frontage in feet,
+      whether you own the property, and any message you write. Both forms record that you ticked
+      the consent box, and when.</p>
+      <p><strong style="color:var(--navy)">Basic technical information.</strong> Like any website,
+      ours is served by a hosting provider that records standard request logs, including IP
+      addresses. We do not have access to those logs and do not use them.</p>
+      <p><strong style="color:var(--navy)">What we do not collect.</strong> This site runs no
+      analytics, no advertising pixels, no tracking scripts, and no third-party cookies. We are
+      not building a profile of you, and we cannot see which pages you looked at.</p>
+
+      ${h("How we use it")}
+      <p>We use what you send us for one purpose: to respond to your enquiry and to communicate
+      with you about billboard advertising or land leasing with ${esc(CONFIG.legalName)}. If you
+      ask about a property, we may use the address you give us to research public records such as
+      zoning, permitting, and traffic data for that location.</p>
+      <p>We do not send marketing emails or newsletters.</p>
+
+      ${h("What we never do")}
       <p><strong style="color:var(--navy)">We do not sell your information.</strong> We do not
-      rent it, trade it, or share it with third-party marketers.</p>
-      <p>We share information only with service providers that operate this website and our
-      email, and only to the extent they need it to provide that service. We may disclose
-      information if required by law.</p>
-      <h3 style="color:var(--navy)">How long we keep it</h3>
-      <p>We retain inquiry information for as long as needed to respond and to maintain our
-      business records.</p>
-      <h3 style="color:var(--navy)">Requesting deletion</h3>
-      <p>You can ask us to delete your information at any time. Email ${esc(CONFIG.email)}
-      or call ${esc(CONFIG.phone)} and we will remove it from our records.</p>
-      <h3 style="color:var(--navy)">Cookies</h3>
-      <p>This site uses cookies to function and to measure traffic. You can disable cookies in
-      your browser settings, though parts of the site may not work correctly.</p>
-      <h3 style="color:var(--navy)">Contact</h3>
-      <p>${esc(CONFIG.legalName)}<br>${esc(CONFIG.city)}, ${esc(CONFIG.state)}<br>${esc(CONFIG.email)}<br>${esc(CONFIG.phone)}</p>
+      rent it, trade it, or share it with data brokers, advertisers, or any third-party
+      marketer. Not now, and not as a change of policy later without telling you.</p>
+
+      ${h("Who else touches your information")}
+      <p>Three companies handle data on our behalf, and only to run this website:</p>
+      <ul class="checks" style="margin-top:16px">
+        <li><strong style="color:var(--navy)">Wix</strong> stores your form submission and our
+        contact records.</li>
+        <li><strong style="color:var(--navy)">GitHub</strong> hosts and serves the website
+        itself.</li>
+        <li><strong style="color:var(--navy)">Google Fonts</strong> and
+        <strong style="color:var(--navy)">OpenStreetMap</strong> supply typefaces and the location
+        maps. Loading them means your browser makes a request to those services, which they may
+        log.</li>
+      </ul>
+      <p>Beyond that, we may disclose information if we are legally required to.</p>
+
+      ${h("Cookies")}
+      <p>We do not set any cookies. Our contact forms briefly store a temporary session token in
+      your browser so the form can submit; it is not an identifier, it contains nothing about
+      you, and it is discarded when you close the tab.</p>
+
+      ${h("How long we keep it")}
+      <p>We keep enquiry information for as long as we may reasonably need it to respond to you
+      and to maintain our business records. Land evaluation records are often worth keeping for
+      years, because a site that cannot be permitted today may qualify later.</p>
+
+      ${h("Seeing or deleting your information")}
+      <p>You can ask us at any time what we hold about you, ask us to correct it, or ask us to
+      delete it. Email <a href="mailto:${esc(CONFIG.email)}" style="color:var(--navy)">${esc(CONFIG.email)}</a>
+      or call ${esc(CONFIG.phone)}. We will action it, and we will not ask you why.</p>
+
+      ${h("Children")}
+      <p>This site is intended for business use and is not directed at children. We do not
+      knowingly collect information from anyone under 18.</p>
+
+      ${h("Changes to this policy")}
+      <p>If we change this policy we will update the date at the top of this page.</p>
+
+      ${h("Contact")}
+      <p>${esc(CONFIG.legalName)}<br>${esc(CONFIG.city)}, ${esc(CONFIG.state)}<br>
+      <a href="mailto:${esc(CONFIG.email)}" style="color:var(--navy)">${esc(CONFIG.email)}</a><br>
+      ${esc(CONFIG.phone)}</p>
     </div>
   </div>
 </section>`;
   return page({
     title: "Privacy Policy | BUFFEL Properties",
-    description: "How BUFFEL Properties collects, uses, and protects information submitted through this site.",
-    path: "/privacy/", active: null, body, noindex: true,
+    description: "What BUFFEL Properties collects through this site, how it is used, and how to have it deleted. No tracking, no analytics, no selling of data.",
+    path: "/privacy/", active: null, body,
   });
 }

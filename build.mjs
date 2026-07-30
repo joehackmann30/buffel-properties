@@ -69,7 +69,6 @@ function sitemap(routes) {
   const base = CONFIG.baseUrl.replace(/\/$/, "");
   const today = new Date().toISOString().slice(0, 10);
   const urls = routes
-    .filter((r) => r !== "/privacy/")
     .map(
       (r) =>
         `  <url><loc>${base}${r}</loc><lastmod>${today}</lastmod><changefreq>${r === "/" ? "weekly" : "monthly"}</changefreq><priority>${r === "/" ? "1.0" : r === "/landowners/" || r === "/locations/" ? "0.9" : "0.7"}</priority></url>`
@@ -86,7 +85,6 @@ function robots() {
   const base = CONFIG.baseUrl.replace(/\/$/, "");
   return `User-agent: *
 Allow: /
-Disallow: /privacy/
 
 Sitemap: ${base}/sitemap.xml
 `;

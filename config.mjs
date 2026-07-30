@@ -24,6 +24,9 @@ export const CONFIG = {
 
   responseTime: "We respond to every inquiry within one business day.",
 
+  // Shown at the top of /privacy/. Update whenever the policy changes.
+  privacyUpdated: "30 July 2026",
+
   rep: {
     name: "Drew Voss",
     title: "Regional Representative, Central Missouri",
