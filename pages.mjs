@@ -448,7 +448,7 @@ export function contact(locations) {
   return page({
     title: "Contact BUFFEL Properties | Billboard Advertising Missouri",
     description: `Advertising inquiries and land evaluation requests. Call ${CONFIG.phone}.`,
-    path: "/contact/", active: "contact", body, scripts: ["/assets/forms.js"],
+    path: "/contact/", active: "contact", body, scripts: ["forms.js"],
   });
 }
 

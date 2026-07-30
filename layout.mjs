@@ -1,6 +1,25 @@
 // Shared page shell, header, footer, and reusable components.
 import { CONFIG, NAV } from "./config.mjs";
 import { tp } from "./content.mjs";
+import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+// Content hash per asset, so a deploy invalidates browser caches. Without this,
+// visitors keep running the previous forms.js/styles.css after an update.
+const ASSET_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "assets");
+const hashCache = {};
+export function asset(file) {
+  if (!hashCache[file]) {
+    try {
+      hashCache[file] = createHash("sha1")
+        .update(readFileSync(path.join(ASSET_DIR, file)))
+        .digest("hex").slice(0, 8);
+    } catch { hashCache[file] = "0"; }
+  }
+  return `/assets/${file}?v=${hashCache[file]}`;
+}
 
 export const esc = (s = "") =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -116,7 +135,7 @@ ${noindex ? '<meta name="robots" content="noindex,follow">\n' : ""}<meta propert
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="${FONTS}" rel="stylesheet">
-<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="${asset("styles.css")}">
 <script type="application/ld+json">${JSON.stringify(blocks.length === 1 ? blocks[0] : blocks)}</script>
 </head>
 <body data-wix-client="${CONFIG.wix.clientId}">
@@ -125,7 +144,7 @@ ${header(active)}
 ${body}
 </main>
 ${footer()}
-${scripts.map((s) => `<script src="${s}" defer></script>`).join("\n")}
+${scripts.map((s) => `<script src="${asset(s)}" defer></script>`).join("\n")}
 </body>
 </html>
 `;
