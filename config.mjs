@@ -22,8 +22,7 @@ export const CONFIG = {
   state: "Missouri",
   stateCode: "MO",
 
-  // [PLACEHOLDER] Fill this in and rebuild.
-  responseTime: "[PLACEHOLDER — e.g. within one business day]",
+  responseTime: "We respond to every inquiry within one business day.",
 
   rep: {
     name: "Drew Voss",
