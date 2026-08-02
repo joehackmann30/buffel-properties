@@ -55,7 +55,7 @@ export function footer() {
   <div class="wrap">
     <div class="fgrid">
       <div>
-        <img src="${CONFIG.logos.wordmark}" alt="${esc(CONFIG.siteName)}" style="width:150px" width="150" height="37">
+        <img src="${CONFIG.logos.wordmarkHeader}" alt="${esc(CONFIG.siteName)}" class="flogo" width="280" height="60">
         <p style="margin-top:18px;font-weight:600;font-size:15px">${esc(CONFIG.legalName).toUpperCase()}</p>
         <p class="dim">${esc(CONFIG.city)}, ${esc(CONFIG.state)}</p>
       </div>

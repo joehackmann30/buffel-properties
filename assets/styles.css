@@ -209,3 +209,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--green);outline-offs
 .field-error{margin-top:6px;font-size:14px;color:#B3261E;font-weight:500}
 [aria-invalid="true"]{border:2px solid #B3261E !important;padding:12px 13px !important}
 button[disabled]{opacity:.6;cursor:default}
+
+/* Footer wordmark — same tightened lockup as the header so PROPERTIES stays
+   legible. Capped so it can't outgrow its grid column on desktop. */
+.flogo{width:100%;max-width:280px;height:auto}
+@media(max-width:900px){.flogo{max-width:260px}}
