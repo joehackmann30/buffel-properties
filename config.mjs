@@ -12,9 +12,10 @@ export const CONFIG = {
   //
   // When the domain is ready: set customDomain to "www.buffelproperties.com",
   // commit, push. The build writes the CNAME and switches all canonical URLs.
-  // TEMPORARY: domain held by a squatter after the Pages takeover (Nov 2026).
-  // Restore to "www.buffelproperties.com" once GitHub domain verification releases it.
-  customDomain: null,
+  // Domain is GitHub-verified (Nov 2026) after the Pages takeover, so it cannot
+  // be claimed by another account. Keep the _github-pages-challenge TXT record
+  // in DNS permanently - removing it un-verifies the domain and reopens the hole.
+  customDomain: "www.buffelproperties.com",
   fallbackUrl: "https://joehackmann30.github.io/buffel-properties",
 
   phone: "636-266-8099",
