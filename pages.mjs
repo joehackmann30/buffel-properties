@@ -4,7 +4,7 @@
 import { CONFIG } from "./config.mjs";
 import { tp, th, tl } from "./content.mjs";
 import {
-  esc, page, rule, badge, locationCard, ctaAdvertiser, ctaLandowner, mapEmbed,
+  esc, page, rule, badge, locationCard, ctaAdvertiser, ctaLandowner, mapEmbed, locationsMap,
 } from "./layout.mjs";
 import { trafficCount, isPending } from "./wix.mjs";
 
@@ -87,9 +87,6 @@ ${ctaAdvertiser()}`;
 /* ================= LOCATIONS INDEX ================= */
 export function locationsIndex(locations) {
   const cards = locations.map(locationCard).join("\n");
-  const marker =
-    locations.length === 1 && locations[0].latitude
-      ? `${locations[0].latitude},${locations[0].longitude}` : null;
   const body = `
 <section class="bg-navy" style="padding-top:88px;padding-bottom:72px">
   <div class="wrap">${rule}<h1 style="font-size:52px">${esc(tp("locations.heading"))}</h1></div>
@@ -100,7 +97,7 @@ export function locationsIndex(locations) {
     <p class="lede" style="max-width:74ch">${esc(tp("locations.intro"))}</p>
     <p style="max-width:74ch;margin-top:20px;color:var(--slate)">${esc(tp("locations.intro2"))}</p>
 
-    <div style="margin-top:48px">${mapEmbed(CONFIG.map.bbox, marker, "Map of BUFFEL Properties billboard locations in Missouri")}</div>
+    <div style="margin-top:48px">${locationsMap(locations, CONFIG.map.bbox, "Map of BUFFEL Properties billboard locations in Missouri")}</div>
     <p class="cap" style="margin-top:12px">${esc(tp("locations.mapnote"))}</p>
 
     <div class="grid-cards" style="margin-top:56px">
@@ -117,6 +114,9 @@ ${ctaAdvertiser()}`;
     description:
       "See where our billboard structures stand across Missouri, with traffic direction, face sizes, and current availability.",
     path: "/locations/", active: "locations", body,
+    head: '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==" crossorigin="anonymous" referrerpolicy="no-referrer">',
+    scripts: [{ src: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js",
+                 integrity: "sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" }, "map.js"],
   });
 }
 

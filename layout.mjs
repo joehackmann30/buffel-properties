@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 const ASSET_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "assets");
 const hashCache = {};
 export function asset(file) {
+  if (/^https?:\/\//.test(file)) return file;
   if (!hashCache[file]) {
     try {
       hashCache[file] = createHash("sha1")
@@ -109,7 +110,7 @@ export function localBusinessSchema() {
 }
 
 /** Full HTML document. */
-export function page({ title, description, path, active, body, schema, noindex = false, scripts = [] }) {
+export function page({ title, description, path, active, body, schema, noindex = false, scripts = [], head = "" }) {
   const canonical = CONFIG.baseUrl.replace(/\/$/, "") + path;
   const blocks = [localBusinessSchema()];
   if (schema) blocks.push(schema);
@@ -139,6 +140,7 @@ ${noindex ? '<meta name="robots" content="noindex,follow">\n' : ""}<meta propert
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="${FONTS}" rel="stylesheet">
 <link rel="stylesheet" href="${asset("styles.css")}">
+${head}
 <script type="application/ld+json">${JSON.stringify(blocks.length === 1 ? blocks[0] : blocks)}</script>
 </head>
 <body data-wix-client="${CONFIG.wix.clientId}" data-phone="${esc(CONFIG.phone)}" data-email="${esc(CONFIG.email)}">
@@ -147,7 +149,9 @@ ${header(active)}
 ${body}
 </main>
 ${footer()}
-${scripts.map((s) => `<script src="${asset(s)}" defer></script>`).join("\n")}
+${scripts.map((s) => typeof s === "string"
+    ? `<script src="${asset(s)}" defer></script>`
+    : `<script src="${s.src}" integrity="${s.integrity}" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>`).join("\n")}
 </body>
 </html>
 `;
@@ -197,6 +201,24 @@ export function ctaLandowner() {
     <div class="btnrow" style="justify-content:center"><a class="btn btn-green" href="/contact/">${esc(tp("cta.land.button"))}</a></div>
   </div>
 </section>`;
+}
+
+/** Interactive multi-pin map, driven by CMS data. Falls back to the static
+    OpenStreetMap iframe when JavaScript or Leaflet is unavailable. */
+export function locationsMap(locations, bbox, title, height = 440) {
+  const pins = locations
+    .filter((l) => typeof l.latitude === "number" && typeof l.longitude === "number")
+    .map((l) => ({
+      name: l.name, lat: l.latitude, lng: l.longitude,
+      status: l.status || "", highway: l.highway || "",
+      city: l.city || "", county: l.county || "",
+      image: l.hero_image || "", href: `/locations/${l.slug}/`,
+    }));
+  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik${pins.length === 1 ? `&marker=${pins[0].lat},${pins[0].lng}` : ""}`;
+  return `<div class="map" id="buffel-map" style="height:${height}px">
+  <iframe class="map-fallback" title="${esc(title)}" loading="lazy" src="${src}"></iframe>
+</div>
+<script type="application/json" id="buffel-map-data">${JSON.stringify(pins).replace(/</g, "\\u003c")}</script>`;
 }
 
 export function mapEmbed(bbox, marker, title, height = 420) {
